@@ -1,0 +1,105 @@
+<!doctype html> 
+<html lang="en"> 
+<head> 
+  <meta charset="utf-8" /> 
+  <meta name="viewport" content="width=device-width, initial-scale=1" /> 
+  <title>Dungeon Explorer — Sprint A (Auth & Persistence)</title> 
+  <link rel="stylesheet" href="css/styles.css" /> 
+</head>
+<body> 
+  <div id="app" class="app-container"> 
+    <header class="header"> 
+      <h1 class="logo">Dungeon Explorer</h1>
+      <div id="session-info" class="session-info" aria-live="polite"></div> 
+    </header>
+
+    
+    <section id="splash-screen" class="screen splash">
+      <h2 class="splash-title">Dungeon Explorer</h2> 
+      <p class="splash-sub">Press any key or click to continue</p> 
+      <button id="start-guest" class="btn">Continue as Guest</button> 
+    </section>
+
+    <!-- Authentication section: contains login and signup cards -->
+    <section id="auth-section" class="screen auth-screen hidden">
+      <div class="cards">
+       
+        <div class="card" id="login-card">
+          <h3>Login</h3> 
+          <form id="login-form" autocomplete="off"> 
+            <label for="login-username">Username</label> 
+            <input id="login-username" name="username" required /> 
+            <label for="login-password">Password</label> 
+            <input id="login-password" name="password" type="password" required /> 
+            <div class="form-actions"> 
+              <button id="login-button" type="submit" class="btn">Login</button> 
+              <button id="to-signup" type="button" class="btn alt">Sign up</button> 
+            </div>
+            <p id="login-message" class="form-message" role="status"></p> 
+          </form>
+        </div>
+
+        
+        <div class="card hidden" id="signup-card">
+          <h3>Sign Up</h3> 
+          <form id="signup-form" autocomplete="off"> 
+            <label for="signup-username">Choose a username</label> 
+            <input id="signup-username" name="username" required /> 
+            <label for="signup-password">Choose a password</label> 
+            <input id="signup-password" name="password" type="password" required /> 
+            <label for="signup-character">Choose character</label> 
+            <select id="signup-character" name="character">
+              <option value="female">Female</option> 
+              <option value="male">Male</option>
+            </select>
+            <div class="form-actions"> 
+              <button id="signup-button" type="submit" class="btn">Create Account</button> 
+              <button id="to-login" type="button" class="btn alt">Back to Login</button> 
+            </div>
+            <p id="signup-message" class="form-message" role="status"></p> 
+          </form>
+        </div>
+      </div>
+    </section>
+
+
+    <section id="character-select" class="screen hidden">
+      <h2>Select Character</h2> 
+      <div class="character-grid"> 
+        <div class="character-card" data-character="female">
+          <img src="assets/characters/female_placeholder.png" alt="Female sprite" />
+          <p>Female</p>
+        </div>
+        <div class="character-card" data-character="male">
+          <img src="assets/characters/male_placeholder.png" alt="Male sprite" />
+          <p>Male</p>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button id="confirm-character" class="btn">Confirm</button>
+      </div>
+    </section>
+
+    
+    <section id="game-area" class="screen hidden">
+      <div id="game-ui" class="game-ui">
+        <div id="hud" class="hud"> 
+          <div id="hearts">♥♥♥</div>
+          <div id="player-info"></div>
+        </div>
+        <canvas id="game-canvas" width="800" height="480" aria-label="Game canvas"></canvas> <!-- Canvas for future game -->
+      </div>
+    </section>
+
+    
+    <footer class="footer">
+      <small>Hello</small> 
+    </footer>
+  </div>
+
+  <!-- Load JS modules  -->
+  <script type="module" src="js/storage.js"></script> 
+  <script type="module" src="js/auth.js"></script> 
+  <script type="module" src="js/main.js"></script> 
+</body>
+</html>

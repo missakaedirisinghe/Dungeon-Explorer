@@ -1,0 +1,190 @@
+/* css/styles.css : Basic responsive styles for Sprint A */
+
+/* Reset box sizing for predictable layout */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+} /* Reset margins and paddings */
+
+/* Body background, font and baseline color */
+body {
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial;
+  background: linear-gradient(180deg, #08121b, #021028);
+  color: #e6eef8;
+  min-height: 100vh;
+} /* Page background and font */
+
+/* App container centers content and provides max width */
+.app-container {
+  max-width: 1100px;
+  margin: 28px auto;
+  padding: 16px;
+}
+
+/* Header layout */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+} /* Header flex layout */
+
+/* Logo styling */
+.logo {
+  font-size: 1.6rem;
+  letter-spacing: 1px;
+  color: #f8f3d4;
+} /* Logo color */
+
+/* Session info small text */
+.session-info {
+  color: #cfe8ff;
+  font-size: 0.9rem;
+} /* Session info text style */
+
+/* Generic screen wrapper used by sections */
+.screen {
+  background: rgba(255, 255, 255, 0.01);
+  padding: 18px;
+  border-radius: 12px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5);
+} /* Screen card look */
+
+/* Hide utility */
+.hidden {
+  display: none !important;
+} /* Utility to hide elements */
+
+/* Splash screen styles */
+.splash {
+  text-align: center;
+  padding: 48px 24px;
+} /* Centered splash */
+.splash-title {
+  font-size: 2.4rem;
+  color: #f8f3d4;
+  margin-bottom: 12px;
+} /* Splash title */
+.splash-sub {
+  color: #bfe1ff;
+  margin-bottom: 16px;
+} /* Small splash subtitle */
+
+/* Card layout for auth forms */
+.cards {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+  justify-content: center;
+} /* Flex layout for cards */
+.card {
+  width: 320px;
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 10px;
+} /* Individual card style */
+.card h3 {
+  margin-bottom: 8px;
+  color: #fff;
+} /* Card heading */
+
+/* Form inputs */
+input,
+select {
+  width: 100%;
+  padding: 8px 10px;
+  margin: 6px 0 12px 0;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.02);
+  color: #e6eef8;
+} /* Inputs style */
+label {
+  display: block;
+  font-size: 0.85rem;
+  color: #cfe8ff;
+  margin-bottom: 4px;
+} /* Form labels */
+
+/* Buttons */
+.btn {
+  display: inline-block;
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #2b8cff, #1b6bdb);
+  color: white;
+  border: none;
+  cursor: pointer;
+} /* Primary button */
+.btn.alt {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  color: #cfe8ff;
+} /* Alternative button */
+
+/* Form actions alignment */
+.form-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 8px;
+} /* Right aligned actions */
+
+/* Message area for feedback */
+.form-message {
+  color: #ffd6d6;
+  min-height: 1.2em;
+  margin-top: 8px;
+} /* Error/info message */
+
+/* Character select grid */
+.character-grid {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin: 16px 0;
+} /* Grid layout */
+.character-card {
+  text-align: center;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.01);
+  border-radius: 8px;
+  cursor: pointer;
+} /* Character card */
+
+/* Game UI area placeholder */
+.game-ui {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+} /* Game UI wrapper */
+.hud {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 12px;
+} /* HUD layout */
+
+/* Footer */
+.footer {
+  margin-top: 12px;
+  text-align: center;
+  color: #9fbfe6;
+  font-size: 0.85rem;
+}
+
+/* Responsive behavior for small screens */
+@media (max-width: 720px) {
+  .cards {
+    flex-direction: column;
+    align-items: stretch;
+  } /* Stack cards on mobile */
+  .card {
+    width: 100%;
+  } /* Full width cards */
+}
