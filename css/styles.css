@@ -1,0 +1,218 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+body {
+    font-family: 'Press Start 2P', cursive;
+    background: #1a1a2e;
+    color: #eee;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+.pixel-border {
+    border: 4px solid #444;
+    box-shadow: 0 0 0 2px #222, 0 0 20px rgba(0,0,0,0.5);
+}
+
+.dungeon-grid {
+    display: grid;
+    gap: 0;
+    background: #2a2a3e;
+    border: 4px solid #5a5a6e;
+}
+
+.cell {
+    width: 40px;
+    height: 40px;
+    position: relative;
+    border: 1px solid #3a3a4e;
+}
+
+.wall {
+    background: #4a4a5e;
+}
+
+.floor {
+    background: #2a2a3e;
+}
+
+.player {
+    width: 32px;
+    height: 32px;
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    z-index: 10;
+    transition: all 0.2s;
+}
+
+.chest {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    background: #8B4513;
+    border: 2px solid #654321;
+    z-index: 5;
+}
+
+.chest-open {
+    background: #DAA520;
+}
+
+.chest::before {
+    content: '📦';
+    font-size: 24px;
+    position: absolute;
+    top: -2px;
+    left: 1px;
+}
+
+.chest-tick {
+    position: absolute;
+    top: -15px;
+    left: 5px;
+    font-size: 20px;
+    z-index: 20;
+}
+
+.door {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    background: #654321;
+    border: 2px solid #8B4513;
+    z-index: 5;
+}
+
+.door::before {
+    content: '🚪';
+    font-size: 24px;
+    position: absolute;
+    top: -2px;
+    left: 0px;
+}
+
+.door-locked {
+    opacity: 0.5;
+}
+
+.heart {
+    display: inline-block;
+    font-size: 24px;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.button-pixel {
+    background: #4a90e2;
+    border: 4px solid #357abd;
+    padding: 12px 24px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+}
+
+.button-pixel:hover {
+    background: #357abd;
+    transform: translateY(-2px);
+}
+
+.button-pixel:active {
+    transform: translateY(0);
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: #2a2a3e;
+    padding: 30px;
+    border: 4px solid #5a5a6e;
+    max-width: 500px;
+    text-align: center;
+}
+
+input {
+    background: #1a1a2e;
+    border: 2px solid #4a4a5e;
+    color: #eee;
+    padding: 10px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 10px;
+}
+
+.character-option {
+    cursor: pointer;
+    padding: 20px;
+    border: 4px solid transparent;
+    transition: all 0.3s;
+}
+
+.character-option:hover {
+    border-color: #4a90e2;
+    transform: scale(1.05);
+}
+
+.character-option.selected {
+    border-color: #4ade80;
+}
+
+.stats-bar {
+    background: #1a1a2e;
+    padding: 15px;
+    border: 3px solid #4a4a5e;
+    margin-bottom: 20px;
+}
+
+.progress-bar {
+    background: #3a3a4e;
+    height: 20px;
+    border: 2px solid #5a5a6e;
+    position: relative;
+}
+
+.progress-fill {
+    background: #4ade80;
+    height: 100%;
+    transition: width 0.3s;
+}
+
+.leaderboard-table {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.leaderboard-table th {
+    background: #4a4a5e;
+    padding: 10px;
+    font-size: 10px;
+}
+
+.leaderboard-table td {
+    padding: 10px;
+    border-bottom: 1px solid #3a3a4e;
+    font-size: 9px;
+}
