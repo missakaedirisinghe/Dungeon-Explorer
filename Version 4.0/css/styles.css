@@ -1,0 +1,632 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+body {
+    font-family: 'Press Start 2P', cursive;
+    background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 100%);
+    color: #eee;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+/* Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: #1a1a2e;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #4a4a5e;
+    border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #5a5a6e;
+}
+
+/* Main Menu Retro Dungeon Background */
+#mainMenu {
+    background:
+        /* Torch flicker overlay */
+        radial-gradient(ellipse at 10% 20%, rgba(255, 140, 0, 0.15) 0%, transparent 30%),
+        radial-gradient(ellipse at 90% 20%, rgba(255, 140, 0, 0.15) 0%, transparent 30%),
+        /* Stone texture pattern */
+        repeating-linear-gradient(0deg,
+            #1a1a2e 0px,
+            #1a1a2e 4px,
+            #16162a 4px,
+            #16162a 8px),
+        repeating-linear-gradient(90deg,
+            #1a1a2e 0px,
+            #1a1a2e 4px,
+            #16162a 4px,
+            #16162a 8px),
+        /* Dark dungeon gradient */
+        radial-gradient(ellipse at center, #2a2a3e 0%, #0a0a1e 100%);
+    background-blend-mode: overlay, overlay, multiply, multiply, normal;
+    animation: torchFlicker 3s ease-in-out infinite;
+}
+
+@keyframes torchFlicker {
+
+    0%,
+    100% {
+        filter: brightness(0.9);
+    }
+
+    50% {
+        filter: brightness(1.1);
+    }
+}
+
+/* Pixel border enhancement for main menu sections */
+#mainMenu .pixel-border {
+    background: rgba(26, 26, 46, 0.85);
+    backdrop-filter: blur(4px);
+    position: relative;
+}
+
+#mainMenu .pixel-border::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        repeating-linear-gradient(45deg,
+            transparent,
+            transparent 2px,
+            rgba(90, 90, 110, 0.03) 2px,
+            rgba(90, 90, 110, 0.03) 4px);
+    pointer-events: none;
+}
+
+.pixel-border {
+    border: 4px solid #5a5a6e;
+    box-shadow:
+        inset 0 0 0 2px #3a3a4e,
+        0 4px 0 #2a2a3e,
+        0 8px 20px rgba(0, 0, 0, 0.6);
+}
+
+.dungeon-grid {
+    display: grid;
+    gap: 0;
+    background: #1a1a2e;
+    border: 6px solid #4a4a5e;
+    box-shadow:
+        inset 0 0 30px rgba(0, 0, 0, 0.8),
+        0 0 40px rgba(74, 144, 226, 0.3);
+    position: relative;
+}
+
+.cell {
+    width: 40px;
+    height: 40px;
+    position: relative;
+    border: 1px solid rgba(58, 58, 78, 0.3);
+    transition: all 0.2s ease;
+}
+
+.wall {
+    background:
+        linear-gradient(135deg, #4a4a5e 0%, #3a3a4e 100%);
+    border: 1px solid #5a5a6e;
+    box-shadow: inset 2px 2px 4px rgba(90, 90, 110, 0.3);
+    position: relative;
+}
+
+.wall::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    right: 2px;
+    bottom: 2px;
+    background:
+        repeating-linear-gradient(90deg, transparent, transparent 4px, rgba(0, 0, 0, 0.1) 4px, rgba(0, 0, 0, 0.1) 8px),
+        repeating-linear-gradient(0deg, transparent, transparent 4px, rgba(0, 0, 0, 0.1) 4px, rgba(0, 0, 0, 0.1) 8px);
+}
+
+.floor {
+    background:
+        linear-gradient(45deg, #2a2a3e 25%, transparent 25%),
+        linear-gradient(-45deg, #2a2a3e 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #2a2a3e 75%),
+        linear-gradient(-45deg, transparent 75%, #2a2a3e 75%);
+    background-size: 8px 8px;
+    background-position: 0 0, 0 4px, 4px -4px, -4px 0px;
+    background-color: #1e1e2e;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.floor.highlight {
+    background-color: #2e2e4e;
+    box-shadow:
+        inset 0 0 20px rgba(74, 144, 226, 0.4),
+        0 0 15px rgba(74, 144, 226, 0.6);
+}
+
+.player {
+    width: 32px;
+    height: 32px;
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    z-index: 10;
+    transition: all 0.25s cubic-bezier(0.4, 0.0, 0.2, 1);
+    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.6));
+    animation: playerFloat 2s ease-in-out infinite;
+}
+
+@keyframes playerFloat {
+
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-3px);
+    }
+}
+
+.chest {
+    width: 28px;
+    height: 24px;
+    position: absolute;
+    top: 8px;
+    left: 6px;
+    background: linear-gradient(135deg, #8B4513 0%, #654321 100%);
+    border: 2px solid #5a3510;
+    border-radius: 2px;
+    z-index: 5;
+    box-shadow:
+        inset 0 -2px 0 rgba(0, 0, 0, 0.3),
+        0 4px 8px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease;
+}
+
+.chest::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 12px;
+    height: 8px;
+    background: #3a2510;
+    border-radius: 1px;
+}
+
+.chest::after {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 6px;
+    height: 4px;
+    background: #DAA520;
+    border-radius: 1px;
+}
+
+.chest:hover {
+    transform: scale(1.1);
+    box-shadow:
+        inset 0 -2px 0 rgba(0, 0, 0, 0.3),
+        0 4px 8px rgba(0, 0, 0, 0.5),
+        0 0 20px rgba(218, 165, 32, 0.6);
+}
+
+.chest-open {
+    background: linear-gradient(135deg, #DAA520 0%, #B8860B 100%);
+    animation: chestOpen 0.5s ease;
+}
+
+@keyframes chestOpen {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.2) rotate(5deg);
+    }
+
+    100% {
+        transform: scale(1) rotate(0deg);
+    }
+}
+
+.chest-tick {
+    position: absolute;
+    top: -18px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 20px;
+    z-index: 20;
+    color: #4ade80;
+    text-shadow: 0 0 10px rgba(74, 222, 128, 0.8);
+    animation: tickAppear 0.5s ease;
+}
+
+@keyframes tickAppear {
+    0% {
+        transform: translateX(-50%) scale(0) rotate(-180deg);
+    }
+
+    50% {
+        transform: translateX(-50%) scale(1.3) rotate(0deg);
+    }
+
+    100% {
+        transform: translateX(-50%) scale(1) rotate(0deg);
+    }
+}
+
+.door {
+    width: 30px;
+    height: 32px;
+    position: absolute;
+    top: 4px;
+    left: 5px;
+    background: linear-gradient(135deg, #654321 0%, #4a3210 100%);
+    border: 2px solid #8B4513;
+    border-radius: 2px;
+    z-index: 5;
+    box-shadow:
+        inset 0 -2px 0 rgba(0, 0, 0, 0.4),
+        0 4px 8px rgba(0, 0, 0, 0.6);
+}
+
+.door::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 4px;
+    width: 4px;
+    height: 4px;
+    background: #DAA520;
+    border-radius: 50%;
+    box-shadow: 0 0 4px rgba(218, 165, 32, 0.8);
+}
+
+.door::after {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 2px;
+    right: 2px;
+    bottom: 4px;
+    border: 1px solid rgba(139, 69, 19, 0.5);
+    border-radius: 1px;
+}
+
+.door-locked {
+    opacity: 0.6;
+    filter: grayscale(0.5);
+}
+
+.door-locked::before {
+    background: #666;
+    box-shadow: none;
+}
+
+.heart {
+    display: inline-block;
+    font-size: 24px;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+.button-pixel {
+    background: #4a90e2;
+    border: 4px solid #357abd;
+    padding: 12px 24px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+}
+
+.button-pixel:hover {
+    background: #357abd;
+    transform: translateY(-2px);
+}
+
+.button-pixel:active {
+    transform: translateY(0);
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: #2a2a3e;
+    padding: 30px;
+    border: 4px solid #5a5a6e;
+    max-width: 500px;
+    text-align: center;
+}
+
+input {
+    background: #1a1a2e;
+    border: 2px solid #4a4a5e;
+    color: #eee;
+    padding: 10px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 10px;
+}
+
+
+.character-option {
+    cursor: pointer;
+    padding: 20px;
+    border: 4px solid transparent;
+    transition: all 0.3s;
+}
+
+.character-option:hover {
+    border-color: #4a90e2;
+    transform: scale(1.05);
+}
+
+.character-option.selected {
+    border-color: #4ade80;
+}
+
+.stats-bar {
+    background: #1a1a2e;
+    padding: 15px;
+    border: 3px solid #4a4a5e;
+    margin-bottom: 20px;
+}
+
+.progress-bar {
+    background: #3a3a4e;
+    height: 20px;
+    border: 2px solid #5a5a6e;
+    position: relative;
+}
+
+.progress-fill {
+    background: #4ade80;
+    height: 100%;
+    transition: width 0.3s;
+}
+
+.leaderboard-table {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.leaderboard-table th {
+    background: #4a4a5e;
+    padding: 10px;
+    font-size: 10px;
+}
+
+.leaderboard-table td {
+    padding: 10px;
+    border-bottom: 1px solid #3a3a4e;
+    font-size: 9px;
+}
+
+/* Password Requirements Styles */
+.password-requirements {
+    background: #1a1a2e;
+    border: 2px solid #4a4a5e;
+    border-radius: 4px;
+    padding: 12px;
+}
+
+.requirement {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 9px;
+    margin-bottom: 6px;
+    transition: all 0.3s ease;
+}
+
+.requirement:last-child {
+    margin-bottom: 0;
+}
+
+.req-icon {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    text-align: center;
+    line-height: 16px;
+    font-size: 12px;
+    color: #ef4444;
+    transition: all 0.3s ease;
+}
+
+.requirement.valid .req-icon {
+    color: #4ade80;
+}
+
+.requirement.valid .req-text {
+    color: #4ade80;
+}
+
+.req-text {
+    color: #9ca3af;
+    transition: all 0.3s ease;
+}
+
+/* Pause Menu Overlay */
+.pause-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+}
+
+.pause-overlay.active {
+    display: flex;
+}
+
+.pause-menu {
+    background: #2a2a3e;
+    padding: 40px;
+    border: 6px solid #5a5a6e;
+    box-shadow:
+        inset 0 0 0 2px #3a3a4e,
+        0 8px 32px rgba(0, 0, 0, 0.8);
+    min-width: 400px;
+    text-align: center;
+}
+
+/* Level Transition Effect */
+.level-transition {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 3000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeOut 1.5s ease-out forwards;
+}
+
+.level-transition-text {
+    font-size: 48px;
+    color: #4ade80;
+    text-shadow: 0 0 20px rgba(74, 222, 128, 0.8);
+    animation: scaleIn 0.5s ease-out;
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+
+    70% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes scaleIn {
+    0% {
+        transform: scale(0);
+    }
+
+    50% {
+        transform: scale(1.2);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Particle Effects */
+.particle {
+    position: fixed;
+    width: 8px;
+    height: 8px;
+    background: #4ade80;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    animation: particleFloat 1s ease-out forwards;
+}
+
+.particle-fail {
+    background: #ef4444;
+}
+
+@keyframes particleFloat {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translate(var(--tx), var(--ty)) scale(0);
+        opacity: 0;
+    }
+}
+
+/* Puzzle Image Container */
+.puzzle-image-container {
+    position: relative;
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    background: #1a1a2e;
+    border: 2px solid #4a4a5e;
+    border-radius: 4px;
+}
+
+.loading-spinner {
+    border: 4px solid #3a3a4e;
+    border-top: 4px solid #4a90e2;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+#puzzleImage {
+    max-width: 100%;
+    max-height: 300px;
+    border-radius: 4px;
+}

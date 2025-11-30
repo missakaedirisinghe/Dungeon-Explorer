@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dungeon Explorer</title>
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/styles.css">
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+</head>
+
+<body class="min-h-screen flex items-center justify-center p-4">
+
+    <!-- Main Menu Screen -->
+    <div id="mainMenu" class="w-full h-screen flex flex-col p-8 relative overflow-hidden fixed inset-0 z-50">
+        <!-- Background Overlay -->
+        <div class="absolute inset-0 bg-black opacity-40 z-0"></div>
+
+        <!-- Header with Centered Title -->
+        <div class="relative z-10 mb-12">
+            <!-- Auth Buttons - Top Right -->
+            <div class="absolute top-0 right-0">
+                <div id="menuAuthButtons" class="flex gap-4">
+                    <button onclick="showLogin()" class="button-pixel bg-blue-600 border-blue-700">Login</button>
+                    <button onclick="showSignup()" class="button-pixel bg-green-600 border-green-700">Sign Up</button>
+                </div>
+                <div id="menuUserDisplay" style="display:none;" class="flex gap-4 items-center">
+                    <span class="text-yellow-400 text-sm">Welcome, <span id="menuUsername">User</span>!</span>
+                    <button onclick="logout()" class="button-pixel bg-red-600 border-red-700">Logout</button>
+                </div>
+            </div>
+
+            <!-- Centered Title -->
+            <h1 class="text-4xl text-yellow-400 drop-shadow-lg text-center"
+                style="font-family: 'Press Start 2P', cursive;">
+                🏰 Dungeon Explorer
+            </h1>
+        </div>
+
+        <!-- Main Content Grid -->
+        <div class="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-8 flex-1 max-w-7xl mx-auto w-full">
+
+            <!-- Section 1: Player Guide -->
+            <div class="pixel-border bg-gray-900 p-6 flex flex-col h-full">
+                <h2 class="text-xl text-green-400 mb-4 text-center">📜 Player Guide</h2>
+                <div class="text-xs text-gray-300 space-y-4 flex-1 overflow-y-auto custom-scrollbar">
+                    <p>Welcome, brave adventurer! Your goal is to explore the dungeon, open chests, and find the exit.
+                    </p>
+                    <ul class="list-disc pl-4 space-y-2">
+                        <li>Use <strong>WASD</strong> or <strong>Arrow Keys</strong> to move.</li>
+                        <li>Walk into <strong>Chests</strong> to open them. Solve the puzzle to claim the loot!</li>
+                        <li>Open all chests to unlock the <strong>Door</strong> to the next level.</li>
+                        <li>Watch out! Wrong answers cost you <strong>Hearts</strong>.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Section 2: Game Controls -->
+            <div class="flex flex-col justify-center gap-6 p-4">
+                <button onclick="handleResumeGame()"
+                    class="button-pixel text-lg py-6 bg-yellow-600 border-yellow-700 hover:scale-105 transition-transform">
+                    ▶ Resume Game
+                </button>
+                <button onclick="handleNewGame()"
+                    class="button-pixel text-lg py-6 bg-purple-600 border-purple-700 hover:scale-105 transition-transform">
+                    ✨ New Game
+                </button>
+            </div>
+
+            <!-- Section 3: Leaderboard Preview -->
+            <div class="pixel-border bg-gray-900 p-6 flex flex-col h-full">
+                <h2 class="text-xl text-blue-400 mb-4 text-center">🏆 Top Adventurers</h2>
+                <div class="flex-1 overflow-hidden">
+                    <table class="w-full text-xs">
+                        <thead>
+                            <tr class="text-gray-400 border-b border-gray-700">
+                                <th class="pb-2 text-left">Rank</th>
+                                <th class="pb-2 text-left">Player</th>
+                                <th class="pb-2 text-right">Lvl</th>
+                            </tr>
+                        </thead>
+                        <tbody id="menuLeaderboardList" class="text-gray-300">
+                            <tr>
+                                <td colspan="3" class="text-center py-4">Loading...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <button onclick="showLeaderboard()" class="button-pixel w-full mt-4 text-xs">View Full
+                    Leaderboard</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login/Signup Screen -->
+    <div id="authScreen" style="display:none;" class="max-w-md w-full pixel-border bg-gray-900 p-8 relative z-50">
+        <button onclick="showMainMenu()" class="absolute top-2 right-2 text-gray-400 hover:text-white">✕</button>
+        <h1 class="text-2xl text-center mb-8 text-yellow-400">🏰 Dungeon Explorer</h1>
+
+        <div id="loginForm">
+            <h2 class="text-lg mb-4 text-center">Login</h2>
+            <input type="email" id="loginEmail" placeholder="Email" class="w-full mb-4">
+            <input type="password" id="loginPassword" placeholder="Password" class="w-full mb-4">
+            <div id="characterScreen" style="display:none;"
+                class="max-w-2xl w-full pixel-border bg-gray-900 p-8 relative z-50">
+                <button onclick="showMainMenu()"
+                    class="absolute top-2 right-2 text-gray-400 hover:text-white">✕</button>
+                <h1 class="text-2xl text-center mb-8 text-yellow-400">Choose Your Character</h1>
+
+                <div class="grid grid-cols-2 gap-8">
+                    <div class="character-option" onclick="selectCharacter('male')" id="maleChar">
+                        <div class="text-6xl text-center mb-4">🧙‍♂️</div>
+                        <h3 class="text-center text-sm">Male Adventurer</h3>
+                    </div>
+                    <div class="character-option" onclick="selectCharacter('female')" id="femaleChar">
+                        <div class="text-6xl text-center mb-4">🧙‍♀️</div>
+                        <h3 class="text-center text-sm">Female Adventurer</h3>
+                    </div>
+                </div>
+
+                <button onclick="startGame()" class="button-pixel w-full mt-8" id="startGameBtn" disabled>Start
+                    Adventure</button>
+            </div>
+
+            <!-- Main Game Screen -->
+            <div id="gameScreen" style="display:none;" class="max-w-6xl w-full relative z-40">
+                <!-- Stats Bar -->
+                <div class="stats-bar flex justify-between items-center flex-wrap gap-4">
+                    <div>
+                        <span class="text-xs">Player: </span>
+                        <span id="playerName" class="text-yellow-400"></span>
+                    </div>
+                    <div>
+                        <span class="text-xs">Level: </span>
+                        <span id="currentLevel" class="text-green-400">1</span>
+                    </div>
+                    <div>
+                        <span class="text-xs">Hearts: </span>
+                        <span id="hearts"></span>
+                    </div>
+                    <div>
+                        <span class="text-xs">XP: </span>
+                        <span id="xpDisplay" class="text-blue-400">0</span>
+                    </div>
+                    <div>
+                        <span class="text-xs">Player Lvl: </span>
+                        <span id="playerLevel" class="text-purple-400">1</span>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="showLeaderboard()"
+                            class="button-pixel text-xs bg-purple-600 border-purple-700">Leaderboard</button>
+                        <button onclick="showMainMenu()" class="button-pixel text-xs bg-red-600 border-red-700">Main
+                            Menu</button>
+                    </div>
+                </div>
+
+                <!-- XP Progress Bar -->
+                <div class="progress-bar mt-4">
+                    <div id="xpBar" class="progress-fill" style="width: 0%"></div>
+                </div>
+                <div class="text-xs text-center mt-1">XP to Next Level: <span id="xpToNext">100</span></div>
+
+                <!-- Dungeon Grid -->
+                <div class="flex justify-center mt-8">
+                    <div id="dungeonGrid" class="dungeon-grid"></div>
+                </div>
+
+                <div class="text-center mt-4 text-xs text-gray-400">
+                    Use WASD or Arrow Keys to move
+                </div>
+            </div>
+
+            <!-- Puzzle Modal -->
+            <div id="puzzleModal" class="modal">
+                <div class="modal-content">
+                    <h2 class="text-xl mb-6 text-yellow-400">🎯 Solve the Puzzle!</h2>
+                    <div class="puzzle-image-container" id="puzzleImageContainer">
+                        <div class="loading-spinner" id="puzzleLoading"></div>
+                        <img id="puzzleImage" style="display:none;" alt="Puzzle">
+                    </div>
+                    <div id="puzzleQuestion" class="text-sm mb-4 text-gray-400"></div>
+                    <input type="number" id="puzzleAnswer" placeholder="Enter the number" class="w-full mb-6" autofocus>
+                    <div class="flex gap-4">
+                        <button onclick="submitPuzzle()" class="button-pixel flex-1">Submit Answer</button>
+                        <button onclick="closePuzzle()"
+                            class="button-pixel flex-1 bg-red-600 border-red-700">Cancel</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pause Menu -->
+            <div id="pauseOverlay" class="pause-overlay">
+                <div class="pause-menu">
+                    <h2 class="text-2xl mb-8 text-yellow-400">⏸️ Paused</h2>
+                    <button onclick="resumeGame()" class="button-pixel w-full mb-4">Resume</button>
+                    <button onclick="showLeaderboard()"
+                        class="button-pixel w-full mb-4 bg-purple-600 border-purple-700">Leaderboard</button>
+                    <button onclick="showMainMenu()" class="button-pixel w-full bg-red-600 border-red-700">Quit to
+                        Menu</button>
+                </div>
+            </div>
+
+            <!-- Leaderboard Modal -->
+            <div id="leaderboardModal" class="modal">
+                <div class="modal-content" style="max-width: 800px;">
+                    <h2 class="text-xl mb-6 text-yellow-400">🏆 Leaderboard</h2>
+
+                    <div class="mb-6">
+                        <h3 class="text-sm mb-2 text-green-400">Highest Level Reached</h3>
+                        <table class="leaderboard-table">
+                            <thead>
+                                <tr>
+                                    <th>Rank</th>
+                                    <th>Player</th>
+                                    <th>Level</th>
+                                    <th>XP</th>
+                                </tr>
+                            </thead>
+                            <tbody id="levelLeaderboard"></tbody>
+                        </table>
+                    </div>
+
+                    <div class="mb-6">
+                        <h3 class="text-sm mb-2 text-blue-400">Top Players by XP</h3>
+                        <table class="leaderboard-table">
+                            <thead>
+                                <tr>
+                                    <th>Rank</th>
+                                    <th>Player</th>
+                                    <th>Player Level</th>
+                                    <th>Total XP</th>
+                                </tr>
+                            </thead>
+                            <tbody id="xpLeaderboard"></tbody>
+                        </table>
+                    </div>
+
+                    <button onclick="closeLeaderboard()" class="button-pixel w-full">Close</button>
+                </div>
+            </div>
+
+            <!-- Game Over Modal -->
+            <div id="gameOverModal" class="modal">
+                <div class="modal-content">
+                    <h2 class="text-2xl mb-6 text-red-400">💀 Game Over!</h2>
+                    <p class="text-sm mb-4">You ran out of hearts!</p>
+                    <p class="text-xs mb-6">Final Level: <span id="finalLevel" class="text-yellow-400"></span></p>
+                    <button onclick="restartGame()" class="button-pixel w-full">Restart Game</button>
+                </div>
+            </div>
+
+            <!-- Victory Modal -->
+            <div id="victoryModal" class="modal">
+                <div class="modal-content">
+                    <h2 class="text-2xl mb-6 text-green-400">🎉 Chest Opened!</h2>
+                    <p class="text-sm mb-4">Correct! +50 XP</p>
+                    <button onclick="closeVictory()" class="button-pixel w-full">Continue</button>
+                </div>
+            </div>
+
+            <!-- Death Modal -->
+            <div id="deathModal" class="modal">
+                <div class="modal-content">
+                    <h2 class="text-xl mb-6 text-red-400">💀 You were eaten by the chest!</h2>
+                    <p class="text-sm mb-4">Wrong answer! -1 Heart</p>
+                    <p class="text-xs mb-6">Correct answer was: <span id="correctAnswer" class="text-yellow-400"></span>
+                    </p>
+                    <button onclick="closeDeath()" class="button-pixel w-full">Continue</button>
+                </div>
+            </div>
+
+            <script src="js/firebase-config.js"></script>
+            <script src="js/main-menu-functions.js"></script>
+            <script src="js/game.js"></script>
+</body>
+
+</html>
